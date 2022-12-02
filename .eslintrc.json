@@ -1,0 +1,61 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-import-helpers"
+  ],
+  "rules": {
+    // "indent": [
+    //   "error",
+    //   2
+    // ],
+    "indent": "off",
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always", // new line between groups
+        "groups": [
+          "/^react/",
+          "module",
+          "/^@shared/",
+          "/^~/services/",
+          [
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "/^~/"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          " ignoreCase": true
+        }
+      }
+    ]
+  }
+}
