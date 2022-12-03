@@ -22,13 +22,14 @@ export async function CreateBusiness(req: Request, res: Response) {
       categories,
       description,
       phones,
-      social_networks,
+      socialNetworks,
       whatsapps,
       addresses,
       weekdays,
-      payment_methods,
+      paymentMethods,
       rating,
       tags,
+      delivery,
     } = req.body;
 
     if (!name) {
@@ -47,21 +48,23 @@ export async function CreateBusiness(req: Request, res: Response) {
       },
       contacts: {
         phones: phones && JSON.parse(phones),
-        social_networks: social_networks && JSON.parse(social_networks),
+        socialNetworks: socialNetworks && JSON.parse(socialNetworks),
         whatsapps: whatsapps && JSON.parse(whatsapps),
       },
       addresses: addresses && JSON.parse(addresses),
       weekdays: weekdays && JSON.parse(weekdays),
 
-      payment_methods: payment_methods && JSON.parse(payment_methods),
+      paymentMethods: paymentMethods && JSON.parse(paymentMethods),
       rating,
       tags: tags && JSON.parse(tags),
+      delivery,
     };
 
     await Business.create(business);
 
     res.json(business);
   } catch (error) {
+    console.error(error);
     res.sendStatus(500);
   }
 }

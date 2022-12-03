@@ -31,7 +31,7 @@ const business = new Schema(
           },
         ],
       },
-      social_networks: {
+      socialNetworks: {
         type: [
           {
             name: {
@@ -102,7 +102,7 @@ const business = new Schema(
           weekday: {
             type: String,
           },
-          opening_and_closing: {
+          openingAndClosing: {
             type: [
               {
                 opens: {
@@ -118,17 +118,18 @@ const business = new Schema(
       ],
     },
 
-    payment_methods: {
+    paymentMethods: {
       type: [
         {
-          method: {
-            type: String,
-          },
-          icon: {
-            type: String,
-          },
+          type: String,
+          enum: ['MONEY', 'CARD', 'PIX', 'DEPOSIT', 'TRANSFER'],
+          default: 'MONEY',
         },
       ],
+    },
+    delivery: {
+      type: Boolean,
+      required: true,
     },
     createdAt: {
       type: Date,

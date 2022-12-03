@@ -13,26 +13,17 @@ export const io = new Server(server);
 
 const NOD_ENV = process.env.NOD_ENV;
 
-// CONFIG LOCAL
-const MONGODB_URL_LOCAL = process.env.MONGODB_URL_LOCAL;
-const LOCAL_PORT = process.env.LOCAL_PORT;
+const HOST_PORT = process.env.HOST_PORT || 3333;
 
 // CONFIG REMOTE
-const MONGODB_URL = process.env.MONGODB_URL;
-const REMOTE_PORT = process.env.REMOTE_PORT;
-
-const database =
-  NOD_ENV !== 'production'
-    ? `${MONGODB_URL_LOCAL}:${LOCAL_PORT}`
-    : `${MONGODB_URL}:${REMOTE_PORT}`;
+const MONGODB = process.env.MONGODB;
+const DB_NAME_MONGO = process.env.DB_NAME_MONGO;
 
 mongoose
-  .connect(database, {
-    dbName: 'carangoladigital',
+  .connect(MONGODB || '', {
+    dbName: DB_NAME_MONGO,
   })
   .then(() => {
-    const port = 3333;
-
     app.use((req, res, next) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', '*');
@@ -47,8 +38,9 @@ mongoose
     app.use(express.json());
     app.use(router);
 
-    server.listen(3333, () => {
-      console.log(`🚀 server running on http://localhost:${port} 🛫`);
+    server.listen(HOST_PORT || '3333', () => {
+      if (NOD_ENV != 'production')
+        console.log(`🚀 server running on http://localhost:${HOST_PORT} 🛫`);
     });
   })
-  .catch(() => console.log('Error connect on mongo'));
+  .catch(() => NOD_ENV != 'production' && console.log('Error connect on db'));
