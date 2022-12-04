@@ -2,22 +2,21 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import http from 'node:http';
+import https from 'node:https';
 import path from 'path';
 import { Server } from 'socket.io';
+
+const NOD_ENV = process.env.NOD_ENV;
+const HOST_PORT = process.env.HOST_PORT || 3333;
+const MONGODB = process.env.MONGODB;
+const DB_NAME_MONGO = process.env.DB_NAME_MONGO;
 
 import { router } from './routes';
 
 const app = express();
-const server = http.createServer(app);
+const server =
+  NOD_ENV !== 'production' ? http.createServer(app) : https.createServer(app);
 export const io = new Server(server);
-
-const NOD_ENV = process.env.NOD_ENV;
-
-const HOST_PORT = process.env.HOST_PORT || 3333;
-
-// CONFIG REMOTE
-const MONGODB = process.env.MONGODB;
-const DB_NAME_MONGO = process.env.DB_NAME_MONGO;
 
 mongoose
   .connect(MONGODB || '', {
@@ -39,7 +38,7 @@ mongoose
     app.use(router);
 
     server.listen(HOST_PORT || '3333', () => {
-      if (NOD_ENV != 'production')
+      if (NOD_ENV !== 'production')
         console.log(`🚀 server running on http://localhost:${HOST_PORT} 🛫`);
     });
   })
