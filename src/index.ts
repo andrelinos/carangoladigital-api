@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import fs from 'fs';
 import mongoose from 'mongoose';
 import http from 'node:http';
 import https from 'node:https';
@@ -15,7 +16,15 @@ import { router } from './routes';
 
 const app = express();
 const server =
-  NOD_ENV !== 'production' ? http.createServer(app) : https.createServer(app);
+  NOD_ENV !== 'production'
+    ? http.createServer(app)
+    : https.createServer(
+        {
+          key: fs.readFileSync('../../cert/key.pem'),
+          cert: fs.readFileSync('../../cert/cert.pem'),
+        },
+        app,
+      );
 export const io = new Server(server);
 
 mongoose
