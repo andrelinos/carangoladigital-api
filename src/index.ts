@@ -46,8 +46,8 @@ mongoose
     app.use(express.json());
     app.use(router);
 
-    server.listen(HOST_PORT || '3333', () => {
-      if (NOD_ENV !== 'production')
+    server.listen(HOST_PORT, () => {
+      if (NOD_ENV !== 'development')
         console.log(`🚀 server running on http://localhost:${HOST_PORT} 🛫`);
     });
   })
