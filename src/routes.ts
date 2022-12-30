@@ -32,7 +32,7 @@ router.post(
   CreateBusiness,
 );
 
-router.patch(
+router.put(
   '/business/:businessId',
   upload.fields([
     { name: 'logo', maxCount: 1 },

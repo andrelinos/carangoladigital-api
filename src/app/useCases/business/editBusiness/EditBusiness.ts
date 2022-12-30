@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { Business } from '../../../models/Business';
 
 type MediaProps = {
-  path: string;
+  filename: string;
 };
 
 type ImagesProps = {
@@ -22,46 +22,64 @@ export async function EditBusiness(req: Request, res: Response) {
       });
     }
 
+    const businessFound = await Business.findById(businessId);
+
+    if (!businessFound) {
+      return res.status(404).json({
+        error: 'Business does not found',
+      });
+    }
+
     const {
       name,
-      category,
+      categories,
       description,
       phones,
-      social_networks,
+      socialNetworks,
       whatsapps,
       addresses,
       weekdays,
-      opening_and_closing,
+      paymentMethods,
+      rating,
+      tags,
+      delivery,
     } = req.body;
 
     const business = {
-      category: category,
-      name,
-      description: description,
-      images: logo &&
-        banner && {
-          logo: logo && logo[0].path,
-          banner: banner && banner[0].path,
-        },
+      categories: categories
+        ? JSON.parse(categories)
+        : businessFound.categories,
+      name: name ? name : businessFound.name,
+      description: description ? description : businessFound.description,
+      images: (logo || banner) && {
+        logo: logo ? logo[0].filename : businessFound.images?.logo,
+        banner: banner ? banner[0]?.filename : businessFound.images?.logo,
+      },
+      contacts: (phones || socialNetworks || whatsapps) && {
+        phones: phones ? JSON.parse(phones) : businessFound.contacts?.phones,
+        socialNetworks: socialNetworks
+          ? JSON.parse(socialNetworks)
+          : businessFound.contacts?.socialNetworks,
+        whatsapps: whatsapps
+          ? JSON.parse(whatsapps)
+          : businessFound.contacts?.whatsapps,
+      },
+      addresses: addresses ? JSON.parse(addresses) : businessFound.addresses,
+      weekdays: weekdays ? JSON.parse(weekdays) : businessFound.weekdays,
 
-      contacts: (phones || social_networks || whatsapps) && {
-        phones: phones && JSON.parse(phones),
-        social_networks: social_networks && JSON.parse(social_networks),
-        whatsapps: whatsapps && JSON.parse(whatsapps),
-      },
-      addresses: addresses && JSON.parse(addresses),
-      weekdays: weekdays && {
-        weekday: weekdays && JSON.parse(weekdays),
-      },
-      opening_and_closing:
-        opening_and_closing && JSON.parse(opening_and_closing),
+      paymentMethods: paymentMethods
+        ? JSON.parse(paymentMethods)
+        : businessFound.paymentMethods,
+      rating: rating ? rating : businessFound.rating,
+      tags: tags ? JSON.parse(tags) : businessFound.tags,
+      delivery: delivery ? delivery : businessFound.delivery,
     };
 
     await Business.findByIdAndUpdate(businessId, business);
 
-    res.json(business);
+    return res.json(business);
   } catch (error) {
     console.error(error);
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 }

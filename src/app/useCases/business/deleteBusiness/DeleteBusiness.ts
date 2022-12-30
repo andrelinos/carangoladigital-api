@@ -11,11 +11,20 @@ export async function DeleteBusiness(req: Request, res: Response) {
         error: 'Business invalid or missing',
       });
     }
+    const businessExists = Business.find({
+      _id: businessId,
+    });
+
+    if ((await businessExists).length < 1) {
+      return res.status(404).json({
+        error: 'Business does not exist',
+      });
+    }
 
     await Business.findByIdAndDelete(businessId);
 
-    res.sendStatus(204);
+    return res.sendStatus(204);
   } catch (error) {
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 }

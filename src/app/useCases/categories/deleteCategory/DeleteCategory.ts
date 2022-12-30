@@ -4,15 +4,15 @@ import { Business } from '../../../models/Business';
 import { Category } from '../../../models/Category';
 
 export async function DeleteCategory(req: Request, res: Response) {
-  const { categoryId } = req.params;
-
-  if (!categoryId) {
-    return res.status(400).json({
-      error: 'Invalid or missing category',
-    });
-  }
-
   try {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+      return res.status(400).json({
+        error: 'Invalid or missing category',
+      });
+    }
+
     const categoryExists = await Category.findById(categoryId);
     const categoryHasBusiness = await Business.find({
       categories: categoryId,

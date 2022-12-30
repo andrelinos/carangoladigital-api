@@ -16,7 +16,7 @@ export async function EditCategory(req: Request, res: Response) {
     const categoryExists = await Category.findById(categoryId);
 
     if (!categoryExists) {
-      res.status(404).json({ message: 'Category does not exist' });
+      return res.status(404).json({ message: 'Category does not exist' });
     }
 
     const categoryFound = await Category.findOne({
@@ -24,19 +24,19 @@ export async function EditCategory(req: Request, res: Response) {
     });
 
     if (categoryFound) {
-      res.status(400).json({
+      return res.status(400).json({
         error: 'Category name already exist',
       });
     }
 
-    if (categoryExists && !categoryFound) {
-      await Category.findByIdAndUpdate(categoryId, {
-        icon,
-        name,
-        description,
-      }).then(() => res.sendStatus(204));
-    }
+    await Category.findByIdAndUpdate(categoryId, {
+      icon,
+      name,
+      description,
+    });
+
+    return res.sendStatus(204);
   } catch (error) {
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 }

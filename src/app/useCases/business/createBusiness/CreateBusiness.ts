@@ -15,8 +15,6 @@ export async function CreateBusiness(req: Request, res: Response) {
   try {
     const { logo, banner } = req.files as unknown as ImagesProps;
 
-    console.log(logo);
-
     const {
       name,
       categories,
