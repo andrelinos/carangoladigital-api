@@ -5,9 +5,9 @@ import { Business } from '../../../models/Business';
 export async function ListBusinessByCategory(req: Request, res: Response) {
   try {
     const { categoryId } = req.params;
-    const businesses = await Business.find()
-      .where('category')
-      .equals(categoryId);
+    const businesses = await Business.find({
+      categories: categoryId,
+    });
 
     res.json(businesses);
   } catch (error) {
