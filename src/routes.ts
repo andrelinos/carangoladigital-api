@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { CreateBusiness } from './app/useCases/business/createBusiness/CreateBusiness';
 import { DeleteBusiness } from './app/useCases/business/deleteBusiness/DeleteBusiness';
 import { EditBusiness } from './app/useCases/business/editBusiness/EditBusiness';
+import { FindBusiness } from './app/useCases/business/findBusiness/FindBusiness';
+import { GetBusinessInfo } from './app/useCases/business/getBusinessInfo/GetBusinessInfo';
 import { ListBusiness } from './app/useCases/business/listBusiness/ListBusiness';
 import { EditCategory } from './app/useCases/categories/EditCategory/EditCategory';
 import { CreateCategory } from './app/useCases/categories/createCategory/CreateCategory';
@@ -42,7 +44,9 @@ router.put(
 );
 
 router.get('/business', ListBusiness);
+router.get('/business/search', FindBusiness);
 
+router.get('/business/:businessId', GetBusinessInfo);
 router.patch('/business/:businessId', EditBusiness);
 
 router.delete('/business/:businessId', DeleteBusiness);

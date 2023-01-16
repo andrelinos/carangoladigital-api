@@ -16,8 +16,10 @@ export async function CreateBusiness(req: Request, res: Response) {
     const { logo, banner } = req.files as unknown as ImagesProps;
 
     const {
+      email,
       name,
       categories,
+      slogan,
       description,
       phones,
       socialNetworks,
@@ -36,9 +38,33 @@ export async function CreateBusiness(req: Request, res: Response) {
       });
     }
 
+    if (!email) {
+      return res.status(400).json({
+        error: 'Email is required',
+      });
+    }
+
+    if (!categories) {
+      return res.status(400).json({
+        error: 'Category is required',
+      });
+    }
+
+    const emailExists = await Business.findOne({
+      email,
+    });
+
+    if (emailExists) {
+      return res.status(400).json({
+        error: 'Email already exist',
+      });
+    }
+
     const business = {
       categories: categories && JSON.parse(categories),
+      email,
       name,
+      slogan,
       description,
       images: {
         logo: logo && logo[0].filename,

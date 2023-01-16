@@ -2,9 +2,17 @@ import { model, Schema } from 'mongoose';
 
 const business = new Schema(
   {
+    email: {
+      type: 'String',
+      required: true,
+      unique: true,
+    },
     name: {
       type: 'String',
       required: true,
+    },
+    slogan: {
+      type: 'String',
     },
     description: {
       type: 'String',
